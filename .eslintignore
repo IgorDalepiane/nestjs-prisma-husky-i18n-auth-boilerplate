@@ -1,0 +1,10 @@
+/coverage
+/dist
+/examples
+/node_modules
+/.next
+next.config.js
+next-i18next.config.js
+.eslintrc.cjs
+.prettierignore
+.prettierrc
