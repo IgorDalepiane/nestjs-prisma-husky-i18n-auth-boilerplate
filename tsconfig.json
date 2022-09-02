@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "CommonJS",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
-    "target": "es2017",
+    "target": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -15,6 +15,7 @@
     "strict": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
+    "strictNullChecks": true,
     "paths": {
       "~/src/*": ["src/*"],
       "~/test/*": ["test/*"]
