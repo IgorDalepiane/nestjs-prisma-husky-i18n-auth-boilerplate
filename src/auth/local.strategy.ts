@@ -8,11 +8,11 @@ import { AuthUserResponseDto } from './dtos/auth-user-response.dto';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
-    super();
+    super({ usernameField: 'email' });
   }
 
-  validate(username: string, password: string): AuthUserResponseDto | UnauthorizedException {
-    const user: AuthUserResponseDto | null = this.authService.validateUser(username, password);
+  async validate(email: string, password: string): Promise<AuthUserResponseDto | UnauthorizedException> {
+    const user: AuthUserResponseDto | null = await this.authService.validateUser({ email, password });
 
     if (!user) {
       throw new UnauthorizedException();

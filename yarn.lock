@@ -767,6 +767,23 @@
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
 
+"@prisma/client@^4.3.1":
+  version "4.3.1"
+  resolved "http://artifacts.connected.bmw/artifactory/api/npm/mobile20-npm-virtual/@prisma/client/-/client-4.3.1.tgz#b9aad9bd9bd43e7f715ec1d763c8bd9273688800"
+  integrity sha1-uarZvZvUPn9xXsHXY8i9knNoiAA=
+  dependencies:
+    "@prisma/engines-version" "4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b"
+
+"@prisma/engines-version@4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b":
+  version "4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b"
+  resolved "http://artifacts.connected.bmw/artifactory/api/npm/mobile20-npm-virtual/@prisma/engines-version/-/engines-version-4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b.tgz#a564dd6fb6f25405fe06164989ebd8a1e4bb3508"
+  integrity sha1-pWTdb7byVAX+BhZJievYoeS7NQg=
+
+"@prisma/engines@4.3.1":
+  version "4.3.1"
+  resolved "http://artifacts.connected.bmw/artifactory/api/npm/mobile20-npm-virtual/@prisma/engines/-/engines-4.3.1.tgz#fb0ad69eded13827fb4cd81995a351c234e8327f"
+  integrity sha1-+wrWnt7ROCf7TNgZlaNRwjToMn8=
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
   resolved "https://registry.npmjs.org/@sinonjs/commons/-/commons-1.8.3.tgz"
@@ -4561,6 +4578,13 @@ pretty-format@^27.0.0, pretty-format@^27.5.1:
     ansi-regex "^5.0.1"
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
+
+prisma@^4.3.1:
+  version "4.3.1"
+  resolved "http://artifacts.connected.bmw/artifactory/api/npm/mobile20-npm-virtual/prisma/-/prisma-4.3.1.tgz#9e4c24e49710392be40ee75fb3d9341d7487881e"
+  integrity sha1-nkwk5JcQOSvkDudfs9k0HXSHiB4=
+  dependencies:
+    "@prisma/engines" "4.3.1"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
