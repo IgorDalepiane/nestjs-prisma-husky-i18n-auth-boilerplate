@@ -10,15 +10,16 @@
     "target": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "incremental": true,
     "strict": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
     "strictNullChecks": true,
     "paths": {
-      "~/src/*": ["src/*"],
-      "~/test/*": ["test/*"]
+      "@src/*": ["./*"],
+      "@test/*": ["../test/*"],
+      "@common/*": ["./common/*"]
     }
   },
   "include": ["**/*.ts"]

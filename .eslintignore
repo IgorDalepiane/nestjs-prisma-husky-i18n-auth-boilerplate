@@ -8,3 +8,4 @@ next-i18next.config.js
 .eslintrc.cjs
 .prettierignore
 .prettierrc
+jest.config.js

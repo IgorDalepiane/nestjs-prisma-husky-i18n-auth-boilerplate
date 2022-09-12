@@ -1,13 +1,33 @@
 import { Module } from '@nestjs/common/decorators/modules';
-import { AppController } from './app.controller';
+import { APP_FILTER } from '@nestjs/core';
+import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
+import * as path from 'path';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './api/v1/auth/auth.module';
 import { CommonModule } from './common.module';
-import { UsersModule } from './users/users.module';
+import { GlobalExceptionFilter } from './global-exception.filter';
+import { UsersModule } from './api/v1/users/users.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, CommonModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    I18nModule.forRoot({
+      fallbackLanguage: 'pt-BR',
+      loaderOptions: {
+        path: path.join(__dirname, '/i18n/'),
+        watch: true,
+      },
+      resolvers: [AcceptLanguageResolver],
+    }),
+    UsersModule,
+    AuthModule,
+    CommonModule,
+  ],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

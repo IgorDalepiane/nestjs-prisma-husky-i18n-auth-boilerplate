@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common/decorators/core';
 import { Prisma, User } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
+import { hashPassword } from '@common/utils';
+import { PrismaService } from '@common/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +29,8 @@ export class UsersService {
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    data.password = await hashPassword(data.password);
+
     return this.prisma.user.create({
       data,
     });

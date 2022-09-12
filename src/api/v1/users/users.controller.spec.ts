@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CommonModule } from '../common.module';
+import { CommonModule } from '@src/common.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
