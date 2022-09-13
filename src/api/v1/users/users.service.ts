@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common/decorators/core';
 import { Prisma, User } from '@prisma/client';
 import { hashPassword } from '@common/utils';
 import { PrismaService } from '@common/prisma/prisma.service';
+import { AuthUserResponseMapper } from '@src/common/auth/mappers';
+import { AuthUserResponseDto } from '@src/common/auth/dtos';
 
 @Injectable()
 export class UsersService {
@@ -9,6 +11,17 @@ export class UsersService {
 
   async findUnique(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<User | null> {
     return this.prisma.user.findUnique({ where: userWhereUniqueInput });
+  }
+
+  async findLoggedUser(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+  ): Promise<AuthUserResponseDto | null> {
+    const user = await this.prisma.user.findUnique({ where: userWhereUniqueInput });
+
+    if (!user) {
+      return null;
+    }
+    return AuthUserResponseMapper.map(user);
   }
 
   async findMany(params: {

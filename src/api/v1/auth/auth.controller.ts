@@ -1,11 +1,13 @@
+import { AuthJwtResponseDto, AuthUserResponseDto } from '@common/auth/dtos';
+import { PrismaClientKnownRequestErrorFilter } from '@common/prisma/filters';
 import { Body, Controller, Post, UseFilters, UseGuards } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
-import { PrismaClientKnownRequestErrorFilter } from '@common/prisma/filters';
+import { CurrentUser, Public } from '@src/common/auth/decorators';
+import { LocalAuthGuard } from '@src/common/auth/guards';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
-import { AuthUserResponseDto } from '@common/auth/dtos';
-import { LocalAuthGuard } from './local-auth.guard';
 
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly usersService: UsersService, private readonly authService: AuthService) {}
@@ -18,9 +20,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('signin')
-  async signinUser(
-    @Body() userData: Pick<Prisma.UserCreateInput, 'email' | 'password'>,
-  ): Promise<AuthUserResponseDto | null> {
-    return await this.authService.validateUser(userData);
+  signinUser(@CurrentUser() user: AuthUserResponseDto): AuthJwtResponseDto {
+    return this.authService.login(user);
   }
 }

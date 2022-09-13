@@ -1,18 +1,16 @@
 import { Injectable } from '@nestjs/common/decorators/core';
-import { Prisma } from '@prisma/client';
 import { comparePassword } from '@common/utils';
 import { UsersService } from '../users/users.service';
-import { AuthUserResponseDto } from '@common/auth/dtos';
 import { AuthUserResponseMapper } from '@common/auth/mappers';
+import { JwtService } from '@nestjs/jwt';
+import { UserLogin } from '@src/common/users/dtos';
+import { AuthJwtPayloadDto, AuthJwtResponseDto, AuthUserResponseDto } from '@src/common/auth/dtos';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService, private jwtService: JwtService) {}
 
-  async validateUser({
-    email,
-    password,
-  }: Pick<Prisma.UserCreateInput, 'email' | 'password'>): Promise<AuthUserResponseDto | null> {
+  async validateUser({ email, password }: UserLogin): Promise<AuthUserResponseDto | null> {
     const user = await this.usersService.findUnique({ email });
 
     if (!user) {
@@ -24,5 +22,13 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  login(user: AuthUserResponseDto): AuthJwtResponseDto {
+    const payload: AuthJwtPayloadDto = { sub: user.id };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }
