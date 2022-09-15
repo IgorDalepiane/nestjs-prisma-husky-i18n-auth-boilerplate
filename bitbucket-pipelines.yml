@@ -3,24 +3,24 @@ image: atlassian/default-image:3
 pipelines:
   branches:
     main:
-    - step:
-        name: 'Deploy to oracle vm'
-        script:
-          - pipe: atlassian/vault-secrets:0.1.2
-            variables:
-              VAULT_ADDRESS: "$VAULT_ADDRESS"
-              VAULT_TOKEN: "$VAULT_TOKEN" # Optional. Required if no oidc and auth is by vault token.
-              SECRET_PATH: "$SECRET_PATH"
-          - sed -e 's/export //' /opt/atlassian/pipelines/agent/build/.secrets/.vault-secrets > .env
-          - pipe: atlassian/rsync-deploy:0.8.1
-            variables:
-              USER: 'ubuntu'
-              SERVER: '$RSYNC_SERVER'
-              REMOTE_PATH: '$RSYNC_REMOTE_PATH'
-              LOCAL_PATH: './*'
-              EXTRA_ARGS: '--chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r -a --exclude="node_modules/"' # Optional.
-          - pipe: atlassian/ssh-run:0.4.1
-            variables:
-              SSH_USER: 'ubuntu'
-              SERVER: '$RSYNC_SERVER'
-              COMMAND: 'cd $RSYNC_REMOTE_PATH; yarn; yarn build && sudo systemctl restart extensionly-api'
+      - step:
+          name: 'Deploy to oracle vm'
+          script:
+            - pipe: atlassian/vault-secrets:0.1.2
+              variables:
+                VAULT_ADDRESS: '$VAULT_ADDRESS'
+                VAULT_TOKEN: '$VAULT_TOKEN' # Optional. Required if no oidc and auth is by vault token.
+                SECRET_PATH: '$SECRET_PATH'
+            - sed -e 's/export //' /opt/atlassian/pipelines/agent/build/.secrets/.vault-secrets > .env
+            - pipe: atlassian/rsync-deploy:0.8.1
+              variables:
+                USER: 'ubuntu'
+                SERVER: '$RSYNC_SERVER'
+                REMOTE_PATH: '$RSYNC_REMOTE_PATH'
+                LOCAL_PATH: './*'
+                EXTRA_ARGS: '--chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r -a --exclude="node_modules/"' # Optional.
+            - pipe: atlassian/ssh-run:0.4.1
+              variables:
+                SSH_USER: 'ubuntu'
+                SERVER: '$RSYNC_SERVER'
+                COMMAND: 'sudo systemctl restart extensionly-api'
