@@ -1,22 +1,26 @@
-# This is an example Starter pipeline configuration
-# Use a skeleton to build, test and deploy using manual and parallel steps
-# -----
-# You can specify a custom docker image from Docker Hub as your build environment.
-
 image: atlassian/default-image:3
 
 pipelines:
-  default:
-    - parallel:
-      - step:
-          name: 'Get secrets from vault'
-          script:
-            - pipe: atlassian/vault-secrets:0.1.2
-              variables:
-                VAULT_ADDRESS: "$VAULT_ADDRESS"
-                VAULT_TOKEN: "$VAULT_TOKEN" # Optional. Required if no oidc and auth is by vault token.
-                SECRET_PATH: "$SECRET_PATH"
-                #VAULT_OIDC_ROLE: "<string>" # Optional, should be provided with BITBUCKET_STEP_OIDC_TOKEN.
-                #BITBUCKET_STEP_OIDC_TOKEN: "<string>" # Optional if already defined in the context.
-                # VAULT_NAMESPACE: "<string>" # Optional
-                DEBUG: "true" # Optional
+  branches:
+    main:
+    - step:
+        name: 'Deploy to oracle vm'
+        script:
+          - pipe: atlassian/vault-secrets:0.1.2
+            variables:
+              VAULT_ADDRESS: "$VAULT_ADDRESS"
+              VAULT_TOKEN: "$VAULT_TOKEN" # Optional. Required if no oidc and auth is by vault token.
+              SECRET_PATH: "$SECRET_PATH"
+          - sed -e 's/export //' /opt/atlassian/pipelines/agent/build/.secrets/.vault-secrets > .env
+          - pipe: atlassian/rsync-deploy:0.8.1
+            variables:
+              USER: 'ubuntu'
+              SERVER: '$RSYNC_SERVER'
+              REMOTE_PATH: '$RSYNC_REMOTE_PATH'
+              LOCAL_PATH: './*'
+              EXTRA_ARGS: '--chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r -a --exclude="node_modules/"' # Optional.
+          - pipe: atlassian/ssh-run:0.4.1
+            variables:
+              SSH_USER: 'ubuntu'
+              SERVER: '$RSYNC_SERVER'
+              COMMAND: 'cd $RSYNC_REMOTE_PATH; yarn; yarn build && sudo systemctl restart extensionly-api'
