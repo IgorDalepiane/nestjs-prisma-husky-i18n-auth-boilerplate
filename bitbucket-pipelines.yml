@@ -1,0 +1,22 @@
+# This is an example Starter pipeline configuration
+# Use a skeleton to build, test and deploy using manual and parallel steps
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+
+image: atlassian/default-image:3
+
+pipelines:
+  default:
+    - parallel:
+      - step:
+          name: 'Get secrets from vault'
+          script:
+            - pipe: atlassian/vault-secrets:0.1.2
+              variables:
+                VAULT_ADDRESS: "$VAULT_ADDRESS"
+                VAULT_TOKEN: "$VAULT_TOKEN" # Optional. Required if no oidc and auth is by vault token.
+                SECRET_PATH: "$SECRET_PATH"
+                #VAULT_OIDC_ROLE: "<string>" # Optional, should be provided with BITBUCKET_STEP_OIDC_TOKEN.
+                #BITBUCKET_STEP_OIDC_TOKEN: "<string>" # Optional if already defined in the context.
+                # VAULT_NAMESPACE: "<string>" # Optional
+                DEBUG: "true" # Optional
