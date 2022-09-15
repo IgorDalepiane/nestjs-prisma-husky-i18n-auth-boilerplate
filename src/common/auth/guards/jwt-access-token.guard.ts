@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common/decorators/core';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from '../decorators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
@@ -10,7 +11,7 @@ export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  canActivate(context: ExecutionContext) {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
